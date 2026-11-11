@@ -66,13 +66,23 @@ log "CPU 架构：${ARCH}"
 # 检查网络工具
 export DEBIAN_FRONTEND=noninteractive
 
-apt-get update
-apt-get install -y curl ca-certificates gnupg
+# 强制 APT 使用 IPv6，适配纯 IPv6 VPS
+log "正在通过 IPv6 更新系统软件源..."
+
+apt-get -o Acquire::ForceIPv6=true update
+
+apt-get -o Acquire::ForceIPv6=true install -y \
+    curl ca-certificates gnupg
 
 # 添加 Cloudflare 官方软件源
 install -d -m 0755 /usr/share/keyrings
 
-curl -fsSL https://pkg.cloudflareclient.com/pubkey.gpg \
+# 强制通过 IPv6 下载 Cloudflare 官方密钥
+curl -6 -fsSL \
+    --connect-timeout 10 \
+    --max-time 60 \
+    --retry 3 \
+    https://pkg.cloudflareclient.com/pubkey.gpg \
     | gpg --yes --dearmor \
     -o /usr/share/keyrings/cloudflare-warp-archive-keyring.gpg
 
@@ -84,8 +94,12 @@ echo "deb [signed-by=/usr/share/keyrings/cloudflare-warp-archive-keyring.gpg] ht
 # 安装 WARP
 log "正在安装 Cloudflare WARP..."
 
-apt-get update
-apt-get install -y cloudflare-warp
+# 强制通过 IPv6 更新软件源并安装 WARP
+log "正在通过 IPv6 安装 Cloudflare WARP..."
+
+apt-get -o Acquire::ForceIPv6=true update
+
+apt-get -o Acquire::ForceIPv6=true install -y cloudflare-warp
 
 # 启动服务
 systemctl enable warp-svc
