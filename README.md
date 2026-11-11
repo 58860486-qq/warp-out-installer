@@ -12,7 +12,7 @@
 ## 一键安装
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/58860486-qq/warp-ipv4-installer/main/install.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/58860486-qq/warp-out-installer/main/install.sh)
 ```
 
 ## 查看状态
@@ -62,7 +62,7 @@ warp-cli connect
 ## 卸载
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/58860486-qq/warp-ipv4-installer/main/uninstall.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/58860486-qq/warp-out-installer/main/uninstall.sh)
 ```
 
 ## 注意事项
